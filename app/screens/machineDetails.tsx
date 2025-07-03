@@ -317,7 +317,7 @@ import CustomDrawer from '../../components/CustomDrawer';
 import { useTheme } from '../../context/ThemeContext';
 
 // ✅ Updated to your Render.com backend
-const API_URL = 'https://indexo-server.onrender.com/machines';
+const API_URL = 'https://indxoapp.onrender.com/machines';
 
 export default function MachineDetails() {
   const { theme } = useTheme();

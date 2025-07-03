@@ -241,7 +241,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 const screenWidth = Dimensions.get('window').width;
 const machineOptions = ['Machine 01', 'Machine 02', 'Machine 03'];
-const API_URL = 'https://indexo-server.onrender.com/spindle-data'; // ✅ Updated Render API
+const API_URL = 'https://indxoapp.onrender.com/spindle-data'; // ✅ Updated Render API
 
 export default function SpindleChartScreen() {
   const { theme } = useTheme();
