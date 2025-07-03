@@ -337,6 +337,11 @@ app.get('/machine-details', (req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.send('🟢 Indexo Backend is running');
+});
+
+
 // ✅ Server Start
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);

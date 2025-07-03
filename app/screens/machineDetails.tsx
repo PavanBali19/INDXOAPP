@@ -1,20 +1,21 @@
+
 // import DateTimePicker from '@react-native-community/datetimepicker';
 // import React, { useEffect, useState } from 'react';
 // import {
-//     Alert,
-//     PermissionsAndroid,
-//     Platform,
-//     ScrollView,
-//     StyleSheet,
-//     Text,
-//     TouchableOpacity,
-//     View,
+//   Alert,
+//   PermissionsAndroid,
+//   Platform,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View,
 // } from 'react-native';
 // import RNHTMLtoPDF from 'react-native-html-to-pdf';
 // import CustomDrawer from '../../components/CustomDrawer';
 // import { useTheme } from '../../context/ThemeContext';
 
-// const API_URL = 'http://192.168.1.197:3000/machines';
+// const API_URL = 'https://aphid-full-frankly.ngrok-free.app/machines';
 
 // export default function MachineDetails() {
 //   const { theme } = useTheme();
@@ -298,6 +299,7 @@
 
 
 
+
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
 import {
@@ -314,7 +316,8 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import CustomDrawer from '../../components/CustomDrawer';
 import { useTheme } from '../../context/ThemeContext';
 
-const API_URL = 'https://aphid-full-frankly.ngrok-free.app/machines';
+// ✅ Updated to your Render.com backend
+const API_URL = 'https://indexo-server.onrender.com/machines';
 
 export default function MachineDetails() {
   const { theme } = useTheme();
@@ -387,8 +390,8 @@ export default function MachineDetails() {
     ).join('');
 
     const html = `
-      <h1>Machine Report - ${machine}</h1>
-      <table border="1" style="width: 100%; border-collapse: collapse;">
+      <h1 style="text-align:center;">Machine Report - ${machine}</h1>
+      <table border="1" style="width: 100%; border-collapse: collapse; font-size: 12px;">
         <tr>
           <th>Name</th>
           <th>Date</th>

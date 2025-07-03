@@ -1,3 +1,4 @@
+
 // // app/screens/dashboard.tsx
 // import { Ionicons } from '@expo/vector-icons';
 // import DateTimePicker from '@react-native-community/datetimepicker';
@@ -24,7 +25,10 @@
 // import { useTheme } from '../../context/ThemeContext';
 
 // const screenWidth = Dimensions.get('window').width;
-// const API_URL = 'http://192.168.1.197:3000/machines';
+
+// // 🌐 Set your ngrok backend URL here
+// const BASE_URL = 'https://aphid-full-frankly.ngrok-free.app';
+// const API_URL = `${BASE_URL}/machines`;
 
 // const AnimatedSvgLine = Animated.createAnimatedComponent(SvgLine);
 
@@ -89,7 +93,7 @@
 //     try {
 //       const formattedDate = date.toISOString().split('T')[0];
 //       console.log('🔍 Fetching:', selectedMachine, formattedDate);
-//       const response = await fetch(`${API_URL}?name=${selectedMachine}&date=${formattedDate}`);
+//       const response = await fetch(`${API_URL}?name=${encodeURIComponent(selectedMachine)}&date=${formattedDate}`);
 //       const data = await response.json();
 //       if (data.length > 0) {
 //         setMachineData(data[0]);
@@ -107,14 +111,10 @@
 
 //   const getStatusColor = (status: string) => {
 //     switch (status) {
-//       case 'Running':
-//         return '#00B386';
-//       case 'Idle':
-//         return '#fbbf24';
-//       case 'Error':
-//         return '#ef4444';
-//       default:
-//         return '#6b7280';
+//       case 'Running': return '#00B386';
+//       case 'Idle': return '#fbbf24';
+//       case 'Error': return '#ef4444';
+//       default: return '#6b7280';
 //     }
 //   };
 
@@ -135,10 +135,7 @@
 //           {['Machine 01', 'Machine 02', 'Machine 03'].map((machine) => (
 //             <TouchableOpacity
 //               key={machine}
-//               style={[
-//                 styles.machineButton,
-//                 selectedMachine === machine && styles.machineSelected,
-//               ]}
+//               style={[styles.machineButton, selectedMachine === machine && styles.machineSelected]}
 //               onPress={() => setSelectedMachine(machine)}
 //             >
 //               <Text style={styles.machineText}>{machine}</Text>
@@ -166,12 +163,7 @@
 //           <>
 //             <View style={styles.rowHeader}>
 //               <Text style={styles.machineName}>{machineData.name}</Text>
-//               <View
-//                 style={[
-//                   styles.statusBadge,
-//                   { backgroundColor: getStatusColor(machineData.status) },
-//                 ]}
-//               >
+//               <View style={[styles.statusBadge, { backgroundColor: getStatusColor(machineData.status) }]}>
 //                 <Text style={styles.statusText}>{machineData.status.toUpperCase()}</Text>
 //               </View>
 //             </View>
@@ -204,16 +196,8 @@
 //               data={{
 //                 labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 //                 datasets: [
-//                   {
-//                     data: [3000, 3100, 2900, 3300, 3200, spindleSpeed],
-//                     color: () => '#4F46E5',
-//                     strokeWidth: 2,
-//                   },
-//                   {
-//                     data: [3.1, 3.3, 3.0, 3.6, 3.4, powerConsumption],
-//                     color: () => '#10B981',
-//                     strokeWidth: 2,
-//                   },
+//                   { data: [3000, 3100, 2900, 3300, 3200, spindleSpeed], color: () => '#4F46E5', strokeWidth: 2 },
+//                   { data: [3.1, 3.3, 3.0, 3.6, 3.4, powerConsumption], color: () => '#10B981', strokeWidth: 2 },
 //                 ],
 //                 legend: ['Spindle', 'Power'],
 //               }}
@@ -258,11 +242,7 @@
 //     backgroundColor: '#0D0D0D',
 //   },
 //   menuButton: { marginRight: 15 },
-//   title: {
-//     color: '#fff',
-//     fontSize: 22,
-//     fontWeight: 'bold',
-//   },
+//   title: { color: '#fff', fontSize: 22, fontWeight: 'bold' },
 //   machineRow: {
 //     flexDirection: 'row',
 //     justifyContent: 'center',
@@ -278,9 +258,7 @@
 //   machineSelected: {
 //     backgroundColor: '#555',
 //   },
-//   machineText: {
-//     color: '#fff',
-//   },
+//   machineText: { color: '#fff' },
 //   dateButton: {
 //     alignSelf: 'center',
 //     backgroundColor: '#444',
@@ -288,9 +266,7 @@
 //     borderRadius: 10,
 //     marginBottom: 20,
 //   },
-//   dateText: {
-//     color: '#fff',
-//   },
+//   dateText: { color: '#fff' },
 //   rowHeader: {
 //     flexDirection: 'row',
 //     justifyContent: 'space-between',
@@ -298,20 +274,13 @@
 //     alignItems: 'center',
 //     marginBottom: 10,
 //   },
-//   machineName: {
-//     fontSize: 20,
-//     color: '#fff',
-//     fontWeight: 'bold',
-//   },
+//   machineName: { fontSize: 20, color: '#fff', fontWeight: 'bold' },
 //   statusBadge: {
 //     paddingVertical: 4,
 //     paddingHorizontal: 10,
 //     borderRadius: 12,
 //   },
-//   statusText: {
-//     color: '#fff',
-//     fontWeight: 'bold',
-//   },
+//   statusText: { color: '#fff', fontWeight: 'bold' },
 //   metricRow: {
 //     flexDirection: 'row',
 //     justifyContent: 'space-around',
@@ -324,16 +293,8 @@
 //     alignItems: 'center',
 //     minWidth: 90,
 //   },
-//   label: {
-//     color: '#9CA3AF',
-//     fontSize: 12,
-//   },
-//   value: {
-//     color: '#fff',
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginTop: 6,
-//   },
+//   label: { color: '#9CA3AF', fontSize: 12 },
+//   value: { color: '#fff', fontSize: 18, fontWeight: 'bold', marginTop: 6 },
 //   utilizationContainer: {
 //     alignItems: 'center',
 //     marginBottom: 30,
@@ -363,13 +324,12 @@
 
 
 
-
-// app/screens/dashboard.tsx
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
+  Image,
   Platform,
   Pressable,
   SafeAreaView,
@@ -391,9 +351,11 @@ import { useTheme } from '../../context/ThemeContext';
 
 const screenWidth = Dimensions.get('window').width;
 
-// 🌐 Set your ngrok backend URL here
-const BASE_URL = 'https://aphid-full-frankly.ngrok-free.app';
+// ✅ Correct API URL
+const BASE_URL = 'https://indexo-server.onrender.com';
 const API_URL = `${BASE_URL}/machines`;
+
+const logo = require('../../assets/images/indxo_logo.png');
 
 const AnimatedSvgLine = Animated.createAnimatedComponent(SvgLine);
 
@@ -457,7 +419,6 @@ export default function Dashboard() {
   const fetchMachineData = async () => {
     try {
       const formattedDate = date.toISOString().split('T')[0];
-      console.log('🔍 Fetching:', selectedMachine, formattedDate);
       const response = await fetch(`${API_URL}?name=${encodeURIComponent(selectedMachine)}&date=${formattedDate}`);
       const data = await response.json();
       if (data.length > 0) {
@@ -492,7 +453,8 @@ export default function Dashboard() {
         <TouchableOpacity onPress={toggleDrawer} style={styles.menuButton}>
           <Ionicons name="menu" size={28} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.title}>CNC MONITORING</Text>
+        <Image source={logo} style={styles.logo} resizeMode="contain" />
+        <Text style={styles.title}>Dashboard</Text>
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
@@ -577,7 +539,7 @@ export default function Dashboard() {
                 decimalPlaces: 1,
               }}
               bezier
-              style={{ borderRadius: 16 }}
+              style={{ borderRadius: 16, marginHorizontal: 20 }}
             />
           </>
         ) : (
@@ -606,8 +568,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#0D0D0D',
   },
+  logo: {
+    width: 120,
+    height: 40,
+    marginRight: 10,
+  },
   menuButton: { marginRight: 15 },
-  title: { color: '#fff', fontSize: 22, fontWeight: 'bold' },
+  title: { color: '#fff', fontSize: 20, fontWeight: 'bold', flex: 1 },
   machineRow: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -620,9 +587,7 @@ const styles = StyleSheet.create({
     margin: 6,
     borderRadius: 10,
   },
-  machineSelected: {
-    backgroundColor: '#555',
-  },
+  machineSelected: { backgroundColor: '#555' },
   machineText: { color: '#fff' },
   dateButton: {
     alignSelf: 'center',

@@ -1,17 +1,20 @@
 
+
+
+
 // import { Ionicons } from '@expo/vector-icons';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 // import React, { useEffect, useState } from 'react';
 // import {
-//     Dimensions,
-//     Platform,
-//     Pressable,
-//     SafeAreaView,
-//     ScrollView,
-//     StyleSheet,
-//     Text,
-//     TouchableOpacity,
-//     View
+//   Dimensions,
+//   Platform,
+//   Pressable,
+//   SafeAreaView,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View
 // } from 'react-native';
 // import { LineChart } from 'react-native-chart-kit';
 // import CustomDrawer from '../../components/CustomDrawer';
@@ -19,6 +22,7 @@
 
 // const screenWidth = Dimensions.get('window').width;
 // const machineOptions = ['Machine 01', 'Machine 02', 'Machine 03'];
+// const API_URL = 'https://aphid-full-frankly.ngrok-free.app/spindle-data'; // 🔄 Updated static ngrok URL
 
 // export default function SpindleChartScreen() {
 //   const { theme } = useTheme();
@@ -38,9 +42,7 @@
 
 //   const fetchSpindleData = async () => {
 //     const formattedDate = date.toISOString().split('T')[0];
-//     const url = `http://192.168.1.197:3000/spindle-data?name=${encodeURIComponent(
-//       selectedMachine
-//     )}&date=${formattedDate}`;
+//     const url = `${API_URL}?name=${encodeURIComponent(selectedMachine)}&date=${formattedDate}`;
 
 //     try {
 //       const res = await fetch(url);
@@ -121,17 +123,6 @@
 //           }}
 //         />
 //       )}
-
-//       {/* ✅ Landscape Toggle */}
-//       {/* <View style={styles.landscapeToggle}>
-//         <Text style={{ color: '#fff', marginRight: 10 }}>Landscape View</Text>
-//         <Switch
-//           value={isLandscape}
-//           onValueChange={setIsLandscape}
-//           thumbColor="#fff"
-//           trackColor={{ false: '#444', true: '#2563eb' }}
-//         />
-//       </View> */}
 
 //       {/* ✅ Chart */}
 //       <Text style={styles.chartTitle}>Speed vs Time</Text>
@@ -230,8 +221,6 @@
 
 
 
-
-
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
@@ -252,7 +241,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 const screenWidth = Dimensions.get('window').width;
 const machineOptions = ['Machine 01', 'Machine 02', 'Machine 03'];
-const API_URL = 'https://aphid-full-frankly.ngrok-free.app/spindle-data'; // 🔄 Updated static ngrok URL
+const API_URL = 'https://indexo-server.onrender.com/spindle-data'; // ✅ Updated Render API
 
 export default function SpindleChartScreen() {
   const { theme } = useTheme();
@@ -260,7 +249,6 @@ export default function SpindleChartScreen() {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [isLandscape, setIsLandscape] = useState(false);
   const [chartData, setChartData] = useState({
     labels: ['0'],
     datasets: [{ data: [0] }],
@@ -306,14 +294,13 @@ export default function SpindleChartScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: '#0D0D0D' }]}>
-      {/* ✅ Drawer Overlay */}
       {drawerVisible && (
         <Pressable style={styles.drawerOverlay} onPress={() => setDrawerVisible(false)}>
           <CustomDrawer onClose={() => setDrawerVisible(false)} />
         </Pressable>
       )}
 
-      {/* ✅ Header with menu */}
+      {/* ✅ Header */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => setDrawerVisible(true)} style={styles.menuButton}>
           <Ionicons name="menu" size={28} color="#fff" />
@@ -321,7 +308,7 @@ export default function SpindleChartScreen() {
         <Text style={styles.title}>🌀 Spindle Speed Chart</Text>
       </View>
 
-      {/* ✅ Machine Select */}
+      {/* ✅ Machine Picker */}
       <View style={styles.machineRow}>
         {machineOptions.map((machine) => (
           <TouchableOpacity
@@ -354,13 +341,15 @@ export default function SpindleChartScreen() {
         />
       )}
 
-      {/* ✅ Chart */}
+      {/* ✅ Chart Title */}
       <Text style={styles.chartTitle}>Speed vs Time</Text>
+
+      {/* ✅ Scrollable Chart */}
       <ScrollView horizontal>
         <LineChart
           data={chartData}
-          width={isLandscape ? screenWidth * 2.2 : screenWidth * 1.5}
-          height={250}
+          width={chartData.labels.length * 60} // ensure enough space
+          height={260}
           chartConfig={{
             backgroundColor: '#1F2937',
             backgroundGradientFrom: '#1F2937',
@@ -373,10 +362,21 @@ export default function SpindleChartScreen() {
               strokeWidth: '1',
               stroke: '#10B981',
             },
+            propsForLabels: {
+              fontSize: 10,
+              rotation: 45,
+            },
             decimalPlaces: 0,
           }}
+          withInnerLines
+          withOuterLines
           bezier
-          style={{ marginVertical: 20, borderRadius: 16, marginHorizontal: 10 }}
+          style={{
+            marginVertical: 20,
+            borderRadius: 16,
+            marginHorizontal: 10,
+            paddingBottom: 10,
+          }}
         />
       </ScrollView>
     </SafeAreaView>
@@ -439,11 +439,5 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'rgba(0,0,0,0.3)',
     zIndex: 999,
-  },
-  landscapeToggle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
   },
 });

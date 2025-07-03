@@ -1,18 +1,20 @@
+
+
 // import { Ionicons } from '@expo/vector-icons';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 // import React, { useEffect, useState } from 'react';
 // import {
-//     Dimensions,
-//     Platform,
-//     Pressable,
-//     SafeAreaView,
-//     ScrollView,
-//     StyleSheet,
-//     Text,
-//     TouchableOpacity,
-//     View,
-//     Alert,
-//     PermissionsAndroid,
+//   Alert,
+//   Dimensions,
+//   PermissionsAndroid,
+//   Platform,
+//   Pressable,
+//   SafeAreaView,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View,
 // } from 'react-native';
 // import { LineChart } from 'react-native-chart-kit';
 // import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -20,7 +22,7 @@
 // import CustomDrawer from '../../components/CustomDrawer';
 
 // const screenWidth = Dimensions.get('window').width;
-// const API_URL = 'http://192.168.1.197:3000/power-data';
+// const API_URL = 'https://aphid-full-frankly.ngrok-free.app/power-data';
 
 // export default function PowerChart() {
 //   const [selectedMachine, setSelectedMachine] = useState('Machine 01');
@@ -290,7 +292,6 @@
 
 
 
-
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
@@ -313,7 +314,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import CustomDrawer from '../../components/CustomDrawer';
 
 const screenWidth = Dimensions.get('window').width;
-const API_URL = 'https://aphid-full-frankly.ngrok-free.app/power-data';
+const API_URL = 'https://indexo-server.onrender.com/power-data';
 
 export default function PowerChart() {
   const [selectedMachine, setSelectedMachine] = useState('Machine 01');
@@ -475,7 +476,7 @@ export default function PowerChart() {
               datasets: [{ data: powerValues, color: () => '#10B981', strokeWidth: 2 }],
             }}
             width={screenWidth - 40}
-            height={220}
+            height={250}
             chartConfig={{
               backgroundColor: '#1F2937',
               backgroundGradientFrom: '#1F2937',
@@ -483,12 +484,31 @@ export default function PowerChart() {
               color: () => '#fff',
               labelColor: () => '#9CA3AF',
               decimalPlaces: 2,
+              propsForLabels: {
+                fontSize: 10,
+                rotation: 45,
+              },
+              propsForDots: {
+                r: '3',
+                strokeWidth: '1',
+                stroke: '#10B981',
+              },
             }}
+            withInnerLines={true}
+            withOuterLines={true}
+            verticalLabelRotation={60}
             bezier
-            style={{ borderRadius: 16, marginHorizontal: 20 }}
+            style={{
+              borderRadius: 16,
+              marginHorizontal: 20,
+              paddingBottom: 20,
+              paddingTop: 10,
+            }}
           />
         ) : (
-          <Text style={{ color: '#aaa', textAlign: 'center', marginTop: 20 }}>No data available</Text>
+          <Text style={{ color: '#aaa', textAlign: 'center', marginTop: 20 }}>
+            No data available
+          </Text>
         )}
 
         <TouchableOpacity onPress={generatePDF} style={styles.downloadBtn}>
