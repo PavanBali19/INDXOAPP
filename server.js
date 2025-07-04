@@ -443,6 +443,13 @@ app.get('/', (req, res) => {
   res.send('🟢 Indexo Backend is running');
 });
 
+
+// ✅ Manual Insert Route (for testing)
+app.get('/insert-now', (req, res) => {
+  runAutoInsert();
+  res.send('✅ Manual autoInsert triggered!');
+});
+
 // ✅ Start Server
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
