@@ -39,6 +39,7 @@
     "express": "^5.1.0",
     "lottie-react-native": "^7.2.3",
     "mysql2": "^3.14.1",
+    "node-cron": "^4.2.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.4",
