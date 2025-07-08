@@ -732,8 +732,6 @@
 //     .catch((err) => console.error('❌ Self-ping failed:', err.message));
 // }, 14 * 60 * 1000); // Every 14 minutes
 
-
-
 require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
@@ -834,6 +832,29 @@ function insertMachineData() {
     }
   });
 
+  // 🔔 Insert random alarms
+  const alarmTypes = [
+    { type: 'Overheat', message: 'Overheat detected on spindle head' },
+    { type: 'SpeedLimit', message: 'Spindle speed exceeded safety limit' },
+    { type: 'UnexpectedStop', message: 'Machine stopped unexpectedly during operation' },
+    { type: 'PowerSurge', message: 'Voltage fluctuation detected' },
+  ];
+
+  machines.forEach((machine) => {
+    const count = Math.floor(Math.random() * 3); // 0 to 2 alarms
+    for (let i = 0; i < count; i++) {
+      const alarm = alarmTypes[Math.floor(Math.random() * alarmTypes.length)];
+      const time = new Date();
+      const query = `
+        INSERT INTO alarm_logs (machine_name, alarm_type, message, timestamp)
+        VALUES (?, ?, ?, ?)
+      `;
+      db.query(query, [machine, alarm.type, alarm.message, time], (err) => {
+        if (err) console.error(`Alarm log insert failed for ${machine}:`, err.message);
+      });
+    }
+  });
+
   console.log(`Dummy data inserted at ${now.toLocaleTimeString()} on ${currentDate}`);
 }
 
@@ -868,7 +889,7 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Get all data for a machine on a specific date
+// Machine data endpoints
 app.get('/machines', (req, res) => {
   const { name, date } = req.query;
   const query = `SELECT * FROM machines WHERE name = ? AND date = ?`;
@@ -879,7 +900,6 @@ app.get('/machines', (req, res) => {
   });
 });
 
-// Get range-based machine data
 app.get('/machines/range', (req, res) => {
   const { name, from, to } = req.query;
   const query = `
@@ -894,13 +914,9 @@ app.get('/machines/range', (req, res) => {
   });
 });
 
-// ✅ Get latest row by name and date
 app.get('/machines/latest', (req, res) => {
   const { name, date } = req.query;
-
-  if (!name || !date) {
-    return res.status(400).json({ error: 'Missing name or date parameter' });
-  }
+  if (!name || !date) return res.status(400).json({ error: 'Missing name or date' });
 
   const query = `
     SELECT *
@@ -909,14 +925,13 @@ app.get('/machines/latest', (req, res) => {
     ORDER BY timestamp DESC
     LIMIT 1
   `;
-
   db.query(query, [name, date], (err, results) => {
     if (err) return res.status(500).json({ error: 'Server error' });
     res.json(results[0] || {});
   });
 });
 
-// Get spindle log data
+// Spindle and power logs
 app.get('/spindle-data', (req, res) => {
   const { name, date } = req.query;
   const query = `
@@ -936,7 +951,6 @@ app.get('/spindle-data', (req, res) => {
   });
 });
 
-// Get power log data
 app.get('/power-data', (req, res) => {
   const { machine, date } = req.query;
   const query = `
@@ -951,10 +965,9 @@ app.get('/power-data', (req, res) => {
   });
 });
 
-// Get alarm logs
+// Alarm logs
 app.get('/alarms', (req, res) => {
   const { machine, date } = req.query;
-
   let query = 'SELECT * FROM alarm_logs WHERE 1=1';
   const params = [];
 
@@ -976,17 +989,16 @@ app.get('/alarms', (req, res) => {
   });
 });
 
-// Get all machines data
+// All machine logs
 app.get('/machine-details', (req, res) => {
   const query = `SELECT * FROM machines ORDER BY date DESC`;
-
   db.query(query, (err, results) => {
     if (err) return res.status(500).json({ error: 'Server error' });
     res.json(results);
   });
 });
 
-// Keep server alive on Render
+// Prevent Render from sleeping
 setInterval(() => {
   fetch('https://indxoapp.onrender.com/')
     .then(() => console.log('Self-ping sent to prevent Render sleep'))
